@@ -90,7 +90,7 @@ def findAllComps(countryCode=244, regionCode=62):
                 competitions.append(comp)
     return json.dumps([ob.toDict() for ob in competitions], indent=2)
 
-
+# TODO: Optimize the living fuck out of this
 def findAllParticipating(countryCode=244, regionCode=62, teamCode="44244M"):
     compsAttending = []
     competitions = findAllComps(countryCode, regionCode)
