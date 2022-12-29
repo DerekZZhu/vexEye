@@ -86,6 +86,7 @@ def findAllComps(countryCode=244, regionCode=62):
                     dates,
                     participants
                 )
+                print(comp.name, comp.dates)
                 competitions.append(comp)
     return json.dumps([ob.toDict() for ob in competitions], indent=2)
 
@@ -113,7 +114,7 @@ def findAllScheduled(countryCode=244, regionCode=62, teamCode="44244M"):
 
     return json.dumps(compsScheduled, indent=2)
     
-print(findAllScheduled())
+# print(findAllScheduled())
 # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 print(findAllComps())
 # json_Mariko = json.dumps([ob.toDict() for ob in allcomps], indent=2)
