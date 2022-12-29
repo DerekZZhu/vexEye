@@ -1,21 +1,21 @@
+import os
 from fastapi import FastAPI
 import json
-from util import findAllComps, findAllParticipating, findAllScheduled, scrapeLeagueDates
+from utility.util import findAllComps, findAllParticipating, findAllScheduled
 
-app = FastAPI()
+
+stage = os.environ.get('STAGE', None)
+openapi_prefix = f"/{stage}" if stage else"/"
+app = FastAPI(title="VexEye", openapi_prefix=openapi_prefix)
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/findAllComps/")
+@app.get("/findAllComps")
 async def allComps(countryCode: int=244, regionCode: int=62):
     json_Marika = json.dumps([ob.toDict() for ob in await findAllComps(countryCode, regionCode)])
     return json_Marika
-
-@app.get("/finders")
-async def boot(countryCode: int=233):
-    return {"message":countryCode}
 
 @app.get("/findAllParticipating")
 async def allParticipating(countryCode: int=244, regionCode: int=62, teamCode: str="44244M"):

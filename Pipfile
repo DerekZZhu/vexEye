@@ -9,6 +9,7 @@ uvicorn = {extras = ["standard"], version = "*"}
 requests = "*"
 bs4 = "*"
 requests-html = "*"
+mangum = "*"
 
 [dev-packages]
 

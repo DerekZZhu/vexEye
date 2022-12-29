@@ -4,11 +4,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, date
 from requests_html import AsyncHTMLSession
 
-from comp import Comp
-
-usCode = 244
-waCode = 62
-ourTeam = "44244M"
+from utility.comp import Comp
 
 async def scrapeParticipants(link) :
     teams = []
