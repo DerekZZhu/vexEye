@@ -1,3 +1,5 @@
 __pycache__
 lib
 lambda_function.zip
+.vercel
+env

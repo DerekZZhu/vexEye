@@ -14,7 +14,7 @@ async def root():
 
 @app.get("/findAllComps")
 async def allComps(countryCode: int=244, regionCode: int=62):
-    json_Marika = json.dumps([ob.toDict() for ob in await findAllComps(countryCode, regionCode)])
+    json_Marika = json.dumps([ob.toDict() for ob in await findAllComps(countryCode, regionCode)], indent=2)
     return json_Marika
 
 @app.get("/findAllParticipating")

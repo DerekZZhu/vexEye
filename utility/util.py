@@ -2,17 +2,18 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime, date
-from requests_html import AsyncHTMLSession
+from requests_html import HTMLSession
+import json
 
-from utility.comp import Comp
+from comp import Comp
 
-async def scrapeParticipants(link) :
+def scrapeParticipants(link) :
     teams = []
-    asession = AsyncHTMLSession()
-    response = await asession.get(link)
+    session = HTMLSession()
+    response = session.get(link)
 
     #TODO HERE
-    await response.html.arender(sleep=3, timeout=20)
+    response.html.render(sleep=3, timeout=20)
     content = response.html.find("tbody tr")
 
     for team in content:
@@ -23,11 +24,11 @@ async def scrapeParticipants(link) :
     return teams 
 
 
-async def scrapeLeagueDates(link) :
+def scrapeLeagueDates(link) :
     dates = []
-    asession = AsyncHTMLSession()
-    response = await asession.get(link)
-    await response.html.arender(sleep=3, timeout=20)
+    session = HTMLSession()
+    response = session.get(link)
+    response.html.render(sleep=3, timeout=20)
     content = response.html.find("summary")
 
     for summary in content:
@@ -36,7 +37,7 @@ async def scrapeLeagueDates(link) :
     return dates
 
 
-async def findAllComps(countryCode, regionCode):
+def findAllComps(countryCode=244, regionCode=62):
     today = date.today().strftime("%d-%m-%Y")
     competitions = []
     for i in range(1,6):
@@ -63,7 +64,7 @@ async def findAllComps(countryCode, regionCode):
 
                 if ("League" in aName or "league" in aName):
                     # TODO await here TANKS efficiency
-                    dates = await scrapeLeagueDates(link)
+                    dates = scrapeLeagueDates(link)
                 else:
                     dates = [competition.select("p")[4].text.split("Date:")[1].strip()]
                     # may tank efficiency 
@@ -75,7 +76,7 @@ async def findAllComps(countryCode, regionCode):
                     aName = ["", aName[0], ""]
 
                 # TODO await here TANKS efficiency
-                participants = await scrapeParticipants(f"{link}#teams")
+                participants = scrapeParticipants(f"{link}#teams")
                 comp = Comp(
                     aName[1],
                     aName[2],
@@ -86,23 +87,23 @@ async def findAllComps(countryCode, regionCode):
                     participants
                 )
                 competitions.append(comp)
-    return competitions
+    return json.dumps([ob.toDict() for ob in competitions], indent=2)
 
 
-async def findAllParticipating(countryCode, regionCode, teamCode):
+def findAllParticipating(countryCode=244, regionCode=62, teamCode="44244M"):
     compsAttending = []
-    competitions = await findAllComps(countryCode, regionCode)
+    competitions = findAllComps(countryCode, regionCode)
 
     for comp in competitions:
         if teamCode in comp.participants:
             compsAttending.append(comp)
 
-    return compsAttending
+    return json.dumps([ob.toDict() for ob in compsAttending], indent=2)
 
 
-async def findAllScheduled(countryCode, regionCode, teamCode):
+def findAllScheduled(countryCode=244, regionCode=62, teamCode="44244M"):
     compsScheduled = []
-    competitions = await findAllComps(countryCode, regionCode)
+    competitions = findAllComps(countryCode, regionCode)
 
     for comp in competitions:
         if teamCode in comp.participants:
@@ -110,11 +111,11 @@ async def findAllScheduled(countryCode, regionCode, teamCode):
                 if datetime.strptime(competitionDate, '%d-%b-%Y').date() > date.today(): 
                     compsScheduled.append({"compName":comp.name, "compDate":competitionDate})
 
-    return compsScheduled
+    return json.dumps(compsScheduled, indent=2)
     
-# print(findAllScheduled(usCode, waCode, "44244M"))
+print(findAllScheduled())
 # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-# allcomps = asyncio.run(findAllComps(usCode, waCode))
+print(findAllComps())
 # json_Mariko = json.dumps([ob.toDict() for ob in allcomps], indent=2)
 # print(json_Mariko)
 
