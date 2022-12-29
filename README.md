@@ -3,6 +3,7 @@
 
 ## GAVE UP ON TRYING TO FIND A SIMPLE HOSTING OPTION
 ## JUST USE THE FUNCTIONS DIRECTLY LOLOLOLOL
+## May take a while since scraping is scuffed. Will look into concurrent scraping methods
 
 ### 1) Clone project
 
@@ -14,7 +15,8 @@ from utility.util import findAllComps, findAllParticipating, findAllScheduled
 ### 4) Call functions and use!
 countryCode -> int (Default is: 244 (US country code))<br>
 regionCode -> int (Default is: 62 (WA region code))<br>
-teamCode -> string (Default is: "44244M" (Mukilteo Robotics Modulo))
+teamCode -> string (Default is: "44244M" (Mukilteo Robotics Modulo))<br>
+<br>
 ===== findAllParticipating(countryCode, regionCode, teamCode) ===== <br>
 Finds all matches that a team has participated in or will participate in the current season. Returns a json string.
 <br>
